@@ -1,5 +1,3 @@
-= CMake
-
-image::snap/gui/icon.svg[CMake,250,250]
+image::snap/gui/CMake_Logo_wide.svg[CMake]
 
 This is the snap for CMake, a cross-platform, open-source build system generator.

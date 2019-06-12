@@ -13,7 +13,7 @@ description: |
 
 license: BSD-3-Clause
 title: CMake
-icon: snap/gui/CMakeSetup128.png
+icon: snap/gui/CMake_Logo.png
 
 confinement: classic
 grade: devel
