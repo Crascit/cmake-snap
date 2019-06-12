@@ -12,7 +12,7 @@ env:
     - LANG: C.UTF-8
     - SNAPCRAFT_ENABLE_SILENT_REPORT: y
     - SNAPCRAFT_BUILD_INFO: y
-    - SNAPCRAFT_IMAGE_INFO: ="{"build_url": "$TRAVIS_BUILD_URL"}
+    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_URL"}'
 
 addons:
   snaps:
