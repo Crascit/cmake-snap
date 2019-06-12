@@ -1,5 +1,4 @@
 name: cmake
-version: "3.14.5"
 summary: "Cross-platform software build system generator"
 description: |
   CMake is an open-source, cross-platform family of tools designed
@@ -9,7 +8,7 @@ description: |
   and workspaces that can be used in the compiler environment of
   your choice.
   CMake is distributed under the BSD 3-clause license. The Qt-based
-  GUI tool also uses LGPLv3.0 components.
+  GUI tool also uses LGPLv3 components.
 
 license: BSD-3-Clause
 title: CMake
@@ -19,6 +18,8 @@ confinement: classic
 grade: devel
 
 base: core18
+
+adopt-info: cmake
 
 apps:
   cmake-gui:
@@ -53,6 +54,8 @@ parts:
         -DCMAKE_INSTALL_PREFIX=/ \
         -DBUILD_TESTING=OFF \
         -DUSE_LGPL=3
+      echo 'message(${CMAKE_VERSION})' > ver.cmake
+      snapcraftctl set-version `Bootstrap.cmk/cmake -P ver.cmake`
       snapcraftctl build
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
