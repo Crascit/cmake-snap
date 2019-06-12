@@ -54,8 +54,9 @@ parts:
         -DCMAKE_INSTALL_PREFIX=/ \
         -DBUILD_TESTING=OFF \
         -DUSE_LGPL=3
-      echo 'message(${CMAKE_VERSION})' > ver.cmake
-      snapcraftctl set-version `Bootstrap.cmk/cmake -P ver.cmake`
+      echo 'message(${CMAKE_VERSION})' > ${SNAPCRAFT_PART_BUILD}/ver.cmake
+      CMAKE_VERSION=$(${SNAPCRAFT_PART_BUILD}/Bootstrap.cmk/cmake -P ${SNAPCRAFT_PART_BUILD}/ver.cmake 2>&1)
+      snapcraftctl set-version $CMAKE_VERSION
       snapcraftctl build
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
