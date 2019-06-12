@@ -1,0 +1,93 @@
+name: cmake
+version: "3.14.5"
+summary: "Cross-platform software build system generator"
+description: |
+  CMake is an open-source, cross-platform family of tools designed
+  to build, test and package software. CMake is used to control the
+  software compilation process using simple platform and compiler
+  independent configuration files, and generate native makefiles
+  and workspaces that can be used in the compiler environment of
+  your choice.
+  CMake is distributed under the BSD 3-clause license. The Qt-based
+  GUI tool also uses LGPLv3.0 components.
+
+license: BSD-3-Clause
+title: CMake
+icon: snap/gui/CMakeSetup128.png
+
+confinement: classic
+grade: devel
+
+base: core18
+
+apps:
+  cmake-gui:
+    command: bin/desktop-launch $SNAP/bin/cmake-gui
+    desktop: share/applications/cmake-gui.desktop
+  ccmake:
+    command: bin/ccmake
+  cmake:
+    command: bin/cmake
+  cpack:
+    command: bin/cpack
+  ctest:
+    command: bin/ctest
+
+parts:
+  cmake:
+    after: [qt5]
+    source: "https://gitlab.kitware.com/cmake/cmake.git"
+    source-depth: 1
+    source-tag: v3.14.5
+    source-type: git
+    plugin: make
+    override-build: |
+      ${SNAPCRAFT_PART_SRC}/bootstrap \
+        --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
+        --sphinx-html \
+        --sphinx-man \
+        --sphinx-qthelp \
+        --qt-gui \
+        -- \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/ \
+        -DBUILD_TESTING=OFF \
+        -DUSE_LGPL=3
+      snapcraftctl build
+      sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
+        $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
+    build-packages:
+      - build-essential
+      - libssl-dev
+      - libncurses5-dev
+      - python-sphinx
+      - qtbase5-dev
+      - qt5-default
+      - qttools5-dev-tools
+    stage-packages:
+      - libssl1.1
+      - libncurses5
+      - libtinfo5
+
+  qt5:
+      source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+      source-subdir: qt
+      plugin: make
+      make-parameters: ["FLAVOR=qt5"]
+      build-packages:
+        - qtbase5-dev
+        - qt5-default
+        - dpkg-dev
+      stage-packages:
+        - libxkbcommon0
+        - ttf-ubuntu-font-family
+        - dmz-cursor-theme
+        - light-themes
+        - adwaita-icon-theme
+        - gnome-themes-standard
+        - shared-mime-info
+        - libqt5gui5
+        - libgdk-pixbuf2.0-0
+        - libqt5svg5 # for loading icon themes which are svg
+        - try: [appmenu-qt5] # not available on core18
+        - locales-all
