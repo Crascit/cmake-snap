@@ -31,7 +31,7 @@ script:
   - sudo snapcraft --use-lxd
 
 after_failure:
-      - sudo journalctl -u snapd
+  - sudo journalctl -u snapd
 
 before_deploy:
   - 'export SNAP_DEPLOY_TRACK=$(if [ -n "$SOURCE_TAG" ]; then echo $SOURCE_TAG | sed -E "s/v([0-9]+)\.([0-9]+)\.[0-9]+(-rc[0-9]+)?/\1\.\2/" ; fi)'

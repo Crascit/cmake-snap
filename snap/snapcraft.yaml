@@ -7,15 +7,17 @@ description: |
   independent configuration files, and generate native makefiles
   and workspaces that can be used in the compiler environment of
   your choice.
-  CMake is distributed under the BSD 3-clause license. The Qt-based
-  GUI tool also uses LGPLv3 components.
+  This snap is maintained separately from the CMake project by one
+  of the CMake co-maintainers. Visit https://crascit.com for additional
+  CMake resources, including the book Professional CMake: A Practical Guide
+  and various blog articles.
 
 license: BSD-3-Clause
 title: CMake
 icon: snap/gui/CMake_Logo.png
 
 confinement: classic
-grade: devel
+grade: stable
 
 base: core18
 
