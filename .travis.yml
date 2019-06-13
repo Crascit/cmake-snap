@@ -1,35 +1,37 @@
 language: bash
 dist: xenial
 
+# SNAPCRAFT_IMAGE_INFO - build traceability
+# SNAPCRAFT_BUILD_INFO - build manifest and security notifications (https://snapcraft.io/blog/introducing-developer-notifications-for-snap-security-updates)
+# SNAPCRAFT_ENABLE_SILENT_REPORT - automated sentry reports for the snapcraft team
+
 env:
   global:
     - LC_ALL: C.UTF-8
     - LANG: C.UTF-8
     - SNAPCRAFT_ENABLE_SILENT_REPORT: y
-    - SNAPCRAFT_ENABLE_DEVELOPER_DEBUG: y
+    - SNAPCRAFT_BUILD_INFO: y
+    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_URL"}'
 
 addons:
   snaps:
    - name: snapcraft
      channel: stable
-     classic: true
+     confinement: classic
    - name: http
    - name: transfer
    - name: lxd
      channel: stable
 
 script:
-  - sudo apt update
   - sudo /snap/bin/lxd.migrate -yes
   - sudo /snap/bin/lxd waitready
   - sudo /snap/bin/lxd init --auto
-  - mkdir -p "$TRAVIS_BUILD_DIR/snaps-cache"
   - 'if [ -n "$SOURCE_TAG" ]; then sed -i "s/source-branch.*/source-tag: $SOURCE_TAG/" snap/snapcraft.yaml ; fi'
   - sudo snapcraft --use-lxd
 
-after_success:
-  - cp *.snap "$(echo "$TRAVIS_REPO_SLUG" | sed -e 's|.*/\(.*\)|\1|')-pr$TRAVIS_PULL_REQUEST.snap"
-  - timeout 180 /snap/bin/transfer "$(echo "$TRAVIS_REPO_SLUG" | sed -e 's|.*/\(.*\)|\1|')-pr$TRAVIS_PULL_REQUEST.snap"
+after_failure:
+      - sudo journalctl -u snapd
 
 before_deploy:
   - 'export SNAP_DEPLOY_TRACK=$(if [ -n "$SOURCE_TAG" ]; then echo $SOURCE_TAG | sed -E "s/v([0-9]+)\.([0-9]+)\.[0-9]+(-rc[0-9]+)?/\1\.\2/" ; fi)'
