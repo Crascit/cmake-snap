@@ -40,7 +40,6 @@ parts:
     after: [qt5]
     source: "https://gitlab.kitware.com/cmake/cmake.git"
     source-depth: 1
-    #source-tag: v3.14.5
     source-branch: master
     source-type: git
     plugin: make

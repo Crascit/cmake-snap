@@ -24,14 +24,18 @@ script:
   - sudo /snap/bin/lxd waitready
   - sudo /snap/bin/lxd init --auto
   - mkdir -p "$TRAVIS_BUILD_DIR/snaps-cache"
+  - 'if [ -n $SOURCE_TAG ]; then sed -i "s/source-branch.*/source-tag: $SOURCE_TAG/" snap/snapcraft.yaml ; fi'
   - sudo snapcraft --use-lxd
 
 after_success:
   - cp *.snap "$(echo "$TRAVIS_REPO_SLUG" | sed -e 's|.*/\(.*\)|\1|')-pr$TRAVIS_PULL_REQUEST.snap"
   - timeout 180 /snap/bin/transfer "$(echo "$TRAVIS_REPO_SLUG" | sed -e 's|.*/\(.*\)|\1|')-pr$TRAVIS_PULL_REQUEST.snap"
 
+before_deploy:
+  - 'export SNAP_DEPLOY_TRACK=$(if [ -n $SOURCE_TAG ]; then echo $SOURCE_TAG | sed -E "s/v([0-9]+)\.([0-9]+)\.[0-9]+(-rc[0-9]+)?/\1\.\2/" ; fi)'
+
 deploy:
   provider: snap
   snap: cmake_*.snap
-  channel: edge
+  channel: ${SNAP_DEPLOY_TRACK:-latest}/edge
   skip_cleanup: true
