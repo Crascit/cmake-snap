@@ -19,6 +19,7 @@ grade: devel
 
 base: core18
 
+# We use the version that the built cmake executable reports
 adopt-info: cmake
 
 apps:
@@ -54,10 +55,10 @@ parts:
         -DCMAKE_INSTALL_PREFIX=/ \
         -DBUILD_TESTING=OFF \
         -DUSE_LGPL=3
-      echo 'message(${CMAKE_VERSION})' > ${SNAPCRAFT_PART_BUILD}/ver.cmake
-      CMAKE_VERSION=$(${SNAPCRAFT_PART_BUILD}/Bootstrap.cmk/cmake -P ${SNAPCRAFT_PART_BUILD}/ver.cmake 2>&1)
-      snapcraftctl set-version $CMAKE_VERSION
       snapcraftctl build
+      echo 'message(${CMAKE_VERSION})' > ${SNAPCRAFT_PART_BUILD}/ver.cmake
+      CMAKE_VERSION=$(${SNAPCRAFT_PART_BUILD}/bin/cmake -P ${SNAPCRAFT_PART_BUILD}/ver.cmake 2>&1)
+      snapcraftctl set-version $CMAKE_VERSION
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
     build-packages:
