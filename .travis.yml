@@ -32,6 +32,6 @@ after_success:
 
 deploy:
   provider: snap
-  snap: cmake
+  snap: cmake_*.snap
   channel: edge
   skip_cleanup: true
