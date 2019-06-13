@@ -32,7 +32,7 @@ after_success:
   - timeout 180 /snap/bin/transfer "$(echo "$TRAVIS_REPO_SLUG" | sed -e 's|.*/\(.*\)|\1|')-pr$TRAVIS_PULL_REQUEST.snap"
 
 before_deploy:
-  - 'export SNAP_DEPLOY_TRACK=$(if [ -n $SOURCE_TAG ]; then echo $SOURCE_TAG | sed -E "s/v([0-9]+)\.([0-9]+)\.[0-9]+(-rc[0-9]+)?/\1\.\2/" ; fi)'
+  - 'export SNAP_DEPLOY_TRACK=$(if [ -n "$SOURCE_TAG" ]; then echo $SOURCE_TAG | sed -E "s/v([0-9]+)\.([0-9]+)\.[0-9]+(-rc[0-9]+)?/\1\.\2/" ; fi)'
 
 deploy:
   provider: snap
