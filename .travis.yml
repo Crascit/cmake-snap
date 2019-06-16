@@ -16,7 +16,7 @@ env:
 addons:
   snaps:
    - name: snapcraft
-     channel: stable
+     channel: candidate
      confinement: classic
    - name: lxd
      channel: stable
