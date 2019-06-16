@@ -32,10 +32,13 @@ apps:
     command: bin/ccmake
   cmake:
     command: bin/cmake
+    completer: share/bash-completion/completions/cmake
   cpack:
     command: bin/cpack
+    completer: share/bash-completion/completions/cmake.cpack
   ctest:
     command: bin/ctest
+    completer: share/bash-completion/completions/cmake.ctest
 
 parts:
   cmake:
@@ -63,6 +66,13 @@ parts:
       snapcraftctl set-version $CMAKE_VERSION
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
+      mkdir -p $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+      cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+      ln -f -s ../../cmake-*/completions/cmake cmake
+      ln -f -s ../../cmake-*/completions/cpack cmake.cpack
+      ln -f -s ../../cmake-*/completions/ctest cmake.ctest
+      sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' ../../cmake-*/completions/cpack
+      sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ../../cmake-*/completions/ctest
     build-packages:
       - build-essential
       - libssl-dev
