@@ -4,6 +4,7 @@ dist: xenial
 # SNAPCRAFT_IMAGE_INFO - build traceability
 # SNAPCRAFT_BUILD_INFO - build manifest and security notifications (https://snapcraft.io/blog/introducing-developer-notifications-for-snap-security-updates)
 # SNAPCRAFT_ENABLE_SILENT_REPORT - automated sentry reports for the snapcraft team
+# SOURCE_TAG - set to CMake release tag for release builds (in the form vX.Y.Z, e.g. v3.15.3)
 
 env:
   global:
@@ -12,6 +13,7 @@ env:
     - SNAPCRAFT_ENABLE_SILENT_REPORT: y
     - SNAPCRAFT_BUILD_INFO: y
     - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_URL"}'
+    #- SOURCE_TAG: vX.Y.Z
 
 addons:
   snaps:
