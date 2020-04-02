@@ -74,6 +74,12 @@ parts:
         ln -f -s ../../cmake-*/completions/ctest cmake.ctest
         sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' ../../cmake-*/completions/cpack
         sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ../../cmake-*/completions/ctest
+      else
+        cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+        sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack
+        sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest
+        ln -f -s cpack cmake.cpack
+        ln -f -s ctest cmake.ctest
       fi
     build-packages:
       - build-essential
