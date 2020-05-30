@@ -1,4 +1,4 @@
-language: bash
+language: shell
 dist: xenial
 
 # SNAPCRAFT_IMAGE_INFO - build traceability
@@ -19,7 +19,7 @@ addons:
   snaps:
    - name: snapcraft
      channel: stable
-     confinement: classic
+     classic: true
    - name: lxd
      channel: stable
 
@@ -40,4 +40,4 @@ deploy:
   provider: snap
   snap: cmake_*.snap
   channel: ${SNAP_DEPLOY_TRACK:-latest}/edge
-  skip_cleanup: true
+  cleanup: false
