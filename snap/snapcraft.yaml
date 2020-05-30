@@ -48,6 +48,9 @@ parts:
     source-branch: master
     source-type: git
     plugin: make
+    build-environment:
+      - LC_ALL: C.UTF-8
+      - LANG: C.UTF-8
     override-build: |
       ${SNAPCRAFT_PART_SRC}/bootstrap \
         --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
@@ -100,8 +103,8 @@ parts:
       plugin: make
       make-parameters: ["FLAVOR=qt5"]
       build-packages:
+        - build-essential
         - qtbase5-dev
-        - qt5-default
         - dpkg-dev
       stage-packages:
         - libxkbcommon0
