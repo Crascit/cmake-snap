@@ -116,3 +116,4 @@ parts:
         - libqt5svg5 # for loading icon themes which are svg
         - try: [appmenu-qt5] # not available on core18
         - locales-all
+        - libgtk2.0-0
