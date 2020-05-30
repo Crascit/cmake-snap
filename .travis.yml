@@ -11,8 +11,8 @@ env:
     - LC_ALL: C.UTF-8
     - LANG: C.UTF-8
     - SNAPCRAFT_ENABLE_SILENT_REPORT: y
-    - SNAPCRAFT_BUILD_INFO: y
-    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_URL"}'
+    - SNAPCRAFT_BUILD_INFO: 1
+    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_WEB_URL"}'
     #- SOURCE_TAG: vX.Y.Z
 
 addons:
