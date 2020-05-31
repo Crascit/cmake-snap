@@ -4,6 +4,8 @@
 /prime/
 
 *.snap
+cmake_*_logs.tar.gz
+cmake_*.txt
 
 .snapcraft
 __pycache__
