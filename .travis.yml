@@ -41,3 +41,4 @@ deploy:
   snap: cmake_*.snap
   channel: ${SNAP_DEPLOY_TRACK:-latest}/edge
   cleanup: false
+  skip_cleanup: true
