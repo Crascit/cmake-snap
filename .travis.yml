@@ -10,10 +10,11 @@ env:
   global:
     - LC_ALL: C.UTF-8
     - LANG: C.UTF-8
+    # Disabled because the embedded colon is problematic, snapcraft 4 rejects it
+    #- SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_WEB_URL"}'
     - SNAPCRAFT_ENABLE_SILENT_REPORT: y
     - SNAPCRAFT_BUILD_ENVIRONMENT: 'lxd'
     - SNAPCRAFT_BUILD_INFO: 1
-    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_WEB_URL"}'
     #- SOURCE_TAG: vX.Y.Z
 
 addons:
