@@ -121,6 +121,20 @@ parts:
         - locales-all
         - libgtk2.0-0
 
+  # Workaround for cmake-gui crash on startup with intel driver
+  mesa:
+    after: [qt5]
+    plugin: nil
+    stage-packages:
+      - libgl1-mesa-dri
+    build-attributes:
+      - no-patchelf # Otherwise snapcraft may strip the build ID and cause the driver to crash
+    prime:
+      - -lib/udev
+      - -usr/doc
+      - -usr/doc-base
+      - -usr/share/applications
+
   # This part removes all the files in this snap which already exist in
   # the base snap. Since these files will be available at runtime from the
   # base snap, they do not need to be included in this snap itself. More info:
@@ -130,6 +144,7 @@ parts:
   cleanup:
     after:
       - cmake
+      - mesa
     plugin: nil
     build-snaps:
       - core18
