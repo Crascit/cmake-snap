@@ -3,11 +3,13 @@ set -e
 
 if [ $# -ne 1 ] ; then
     echo "Usage: $0 x.y.z"
-    echo "Where x.y.z is the CMake version to build and release" 1>&2
+    echo "Where x.y.z is the CMake version to build and release."
+    echo "An optional suffix starting with a hyphen (e.g. -rc1)"
+    echo "can be appended."
     exit 1
 fi
 cmakeVersion=$1
-track=$( echo ${cmakeVersion} | sed 's/^\([0-9]\+\.[0-9]\+\)\.[0-9]\+$/\1/' )
+track=$( echo ${cmakeVersion} | sed 's/^\([0-9]\+\.[0-9]\+\)\.[0-9]\+\(-.\+\)\?$/\1/' )
 
 echo "Building CMake ${cmakeVersion} for track ${track}"
 
