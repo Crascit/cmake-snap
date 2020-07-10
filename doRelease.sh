@@ -27,6 +27,6 @@ tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
 for arch in ${archesSpaced} ; do
     filename=cmake_${cmakeVersion}_${arch}.snap
     echo "Uploading ${filename} to channel ${track}/edge"
-    snapcraft push ${filename} --release ${track}/edge
+    snapcraft upload ${filename} --release ${track}/edge
 done
 
