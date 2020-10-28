@@ -45,7 +45,7 @@ parts:
     after: [qt5]
     source: "https://gitlab.kitware.com/cmake/cmake.git"
     source-depth: 1
-    source-branch: master
+    source-tag: v3.19.0-rc2
     source-type: git
     plugin: make
     build-environment:
