@@ -23,7 +23,7 @@ icon: snap/gui/CMake_Logo.png
 confinement: classic
 grade: stable
 
-base: core18
+base: core20
 
 # We use the version that the built cmake executable reports
 adopt-info: cmake
@@ -92,7 +92,7 @@ parts:
       - build-essential
       - libssl-dev
       - libncurses5-dev
-      - python-sphinx
+      - python3-sphinx
       - qtbase5-dev
       - qt5-default
       - qttools5-dev-tools
