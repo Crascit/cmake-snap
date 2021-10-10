@@ -7,10 +7,14 @@ description: |
   independent configuration files, and generate native makefiles
   and workspaces that can be used in the compiler environment of
   your choice.
+
   This snap is maintained separately from the CMake project by one
-  of the CMake co-maintainers. Visit https://crascit.com for additional
-  CMake resources, including the book Professional CMake: A Practical Guide
-  and various blog articles.
+  of the CMake co-maintainers.
+
+  * Report CMake bugs: https://gitlab.kitware.com/cmake/cmake/issues
+  * Ask CMake questions in the forum: https://discourse.cmake.org
+  * Get the book _Professional CMake: A Practical Guide_: https://crascit.com/professional-cmake/
+  * Follow @crascit on Twitter at https://twitter.com/crascit
 
 license: BSD-3-Clause
 title: CMake
