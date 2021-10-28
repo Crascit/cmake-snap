@@ -23,6 +23,8 @@ icon: snap/gui/CMake_Logo.png
 confinement: classic
 grade: stable
 
+# This has to be changed to core18 for i386 builds, which do not
+# have support for core20
 base: core20
 
 # We use the version that the built cmake executable reports

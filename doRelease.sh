@@ -15,15 +15,19 @@ echo "Building CMake ${cmakeVersion} for track ${track}"
 
 sed -i "s/source-\(branch\|tag\):.*/source-tag: v${cmakeVersion}/" snap/snapcraft.yaml
 
+archesCore20=amd64,arm64,armhf,ppc64el,s390x
+archesCore18=i386
+
+snapcraft remote-build --build-on=${archesCore20}
+sed -i "s/base:.*/base: core18/" snap/snapcraft.yaml
+snapcraft remote-build --build-on=${archesCore18}
+
+tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
+
 # The order of these matches the order they are shown in the Releases panel
 # of the snap store, so keep it this way for convenience
 archesComma=amd64,arm64,armhf,i386,ppc64el,s390x
 archesSpaced=$(echo ${archesComma} | sed "s/,/ /g")
-
-snapcraft remote-build --build-on=${archesComma}
-
-tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
-
 for arch in ${archesSpaced} ; do
     filename=cmake_${cmakeVersion}_${arch}.snap
     echo "Uploading ${filename} to channel ${track}/edge"
