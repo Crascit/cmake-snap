@@ -18,9 +18,9 @@ sed -i "s/source-\(branch\|tag\):.*/source-tag: v${cmakeVersion}/" snap/snapcraf
 archesCore20=amd64,arm64,armhf,ppc64el,s390x
 archesCore18=i386
 
-snapcraft remote-build --build-on=${archesCore20}
+snapcraft remote-build --build-on=${archesCore20} --launchpad-accept-public-upload
 sed -i "s/base:.*/base: core18/" snap/snapcraft.yaml
-snapcraft remote-build --build-on=${archesCore18}
+snapcraft remote-build --build-on=${archesCore18} --launchpad-accept-public-upload
 
 tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
 
