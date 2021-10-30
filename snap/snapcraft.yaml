@@ -60,6 +60,7 @@ parts:
     override-build: |
       ${SNAPCRAFT_PART_SRC}/bootstrap \
         --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
+        --docdir=doc/cmake \
         --sphinx-html \
         --sphinx-man \
         --sphinx-qthelp \
