@@ -25,7 +25,6 @@ grade: stable
 
 # The core20 base doesn't support the i386 architecture
 base: core20
-architectures: [amd64, arm64, armhf, ppc64el, s390x]
 
 # We use the version that the built cmake executable reports
 adopt-info: cmake

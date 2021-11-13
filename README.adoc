@@ -6,33 +6,31 @@ image::https://snapcraft.io/cmake/badge.svg[link="https://snapcraft.io/cmake"]
 
 # Release Instructions
 
-When an official CMake release is made, a manual job has to be triggered
-in Travis CI:
+When an official CMake release is made, run the link:doRelease.sh[doRelease.sh] script locally on a Linux machine.
+Pass the release number as the only command line argument.
+Release candidates are supported.
 
-image::doc/travis_options_menu.png[]
+```
+./doRelease.sh 3.22.0-rc3
+```
 
-This will bring up the following dialog, with important fields/contents
-indicated by arrows (the screenshot shows the correct way to trigger a
-build for the CMake 3.15.3 release as an example):
+The script will run two `snapcraft remote-build` jobs.
+The first builds the majority of the snaps using the `core20` base.
+The second builds the `i386` architecture, which has to use the `core18` base.
+Once both builds have been completed, the log files will be collected into a tarball `cmake_<version>_logs.tar.gz` for easy archiving.
+All the snaps will be downloaded to the current directory by the `remote-build` jobs.
 
-image::doc/travis_trigger_custom_build.png[]
+Once all `remote-build` jobs have been completed, the snaps will be uploaded to the `edge` channel of the relevant track.
+The uploads are done in parallel, since they can take a while.
+Once all uploads have been completed, the script will finish.
 
-The *Commit message* field is only used as the message for the build, it is
-not actually used to make any sort of commit. It is being used to override
-the commit message of the commit that is being checked out. Use a message
-of the form "Tagged X.Y.Z release".
+# GitHub Integration
 
-By default, the build will pick up latest CMake master. For releases, the
-release tag needs to be used instead. This is achieved by copying the
-`env` block from the `.travis.yml` file and appending a `SOURCE_TAG` with
-a value of the form `vX.Y.Z` (note the leading `v`), which must exactly
-match the git tag used for the release in CMake's git repository.
+There are problems with the GitHub integration which prevent it from being suitable for release builds at this time:
 
-With the above information filled in, trigger the build by clicking the
-button at the bottom of the dialog. If the build is successful, it will
-automatically deploy the resultant snap to the X.Y channel as the *edge*
-build. This can then be tested on a Linux system and once you have
-confirmed that the package is okay, it can be promoted to the stable
-release for that channel (this is done in the snapcraft.io website, not
-travis CI). If this is the latest release, then it should also be set as
-the stable release in the `latest` channel.
+* It always builds the default branch, regardless of which branch is pushed to trigger a build.
+  See https://forum.snapcraft.io/t/snap-build-service-picking-default-branch-instead-of-pushed-branch>[this forum post] describing the problem.
+* We need to specify a specific source tag for the CMake repo in release builds, which requires modifying the link:snap/snapcraft.yaml[snapcraft.yaml] file.
+* We have to modify the base used due to the `i386` architecture not being supported as of `core20`, which also requires modifying the link:snap/snapcraft.yaml[snapcraft.yaml] file.
+
+We also cannot use GitHub actions directly because it doesn't support building for all the architectures we need.

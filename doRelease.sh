@@ -18,19 +18,21 @@ sed -i "s/source-\(branch\|tag\):.*/source-tag: v${cmakeVersion}/" snap/snapcraf
 archesCore20=amd64,arm64,armhf,ppc64el,s390x
 archesCore18=i386
 
+sed -i "s/base:.*/base: core20/" snap/snapcraft.yaml
 snapcraft remote-build --build-on=${archesCore20} --launchpad-accept-public-upload
 sed -i "s/base:.*/base: core18/" snap/snapcraft.yaml
 snapcraft remote-build --build-on=${archesCore18} --launchpad-accept-public-upload
 
 tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
 
-# The order of these matches the order they are shown in the Releases panel
-# of the snap store, so keep it this way for convenience
-archesComma=amd64,arm64,armhf,i386,ppc64el,s390x
+# Uploads can take a while, do them in parallel
+archesComma=${archesCore20},${archesCore18}
 archesSpaced=$(echo ${archesComma} | sed "s/,/ /g")
 for arch in ${archesSpaced} ; do
     filename=cmake_${cmakeVersion}_${arch}.snap
     echo "Uploading ${filename} to channel ${track}/edge"
-    snapcraft upload ${filename} --release ${track}/edge
+    snapcraft upload ${filename} --release ${track}/edge &
 done
+wait
 
+echo "All upload jobs finished"
