@@ -1,14 +1,2 @@
-#snapcraft specifics
-/parts/
-/stage/
-/prime/
+build
 
-*.snap
-cmake_*_logs.tar.gz
-cmake_*.txt
-
-.snapcraft
-__pycache__
-*.pyc
-*_source.tar.bz2
-snap/.snapcraft

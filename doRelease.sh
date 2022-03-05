@@ -1,35 +1,57 @@
 #!/bin/bash
 set -e
 
-if [ $# -ne 1 ] ; then
-    echo "Usage: $0 x.y.z"
-    echo "Where x.y.z is the CMake version to build and release."
-    echo "An optional suffix starting with a hyphen (e.g. -rc1)"
-    echo "can be appended."
+# This value is changed on each release branch. For release branches, this value
+# should have the form vX.Y.Z or vX.Y.Z-rcN
+cmakeVersion=master
+
+if [ $# -gt 0 ] ; then
+    echo "No command line options are supported. The CMake version is"
+    echo "hard-coded in this script as \"${cmakeVersion}\""
     exit 1
 fi
-cmakeVersion=$1
-track=$( echo ${cmakeVersion} | sed 's/^\([0-9]\+\.[0-9]\+\)\.[0-9]\+\(-.\+\)\?$/\1/' )
+
+if [ "${cmakeVersion}" = "master" ] ; then
+    track=latest
+    cmake_source_version_key=branch
+    cmake_source_version_value=master
+else
+    track=$( echo ${cmakeVersion} | sed 's/^\([0-9]\+\.[0-9]\+\)\.[0-9]\+\(-.\+\)\?$/\1/' )
+    cmake_source_version_key=tag
+    cmake_source_version_value=v${cmakeVersion}
+fi
 
 echo "Building CMake ${cmakeVersion} for track ${track}"
-
-sed -i "s/source-\(branch\|tag\):.*/source-tag: v${cmakeVersion}/" snap/snapcraft.yaml
 
 archesCore20=amd64,arm64,armhf,ppc64el,s390x
 archesCore18=i386
 
-sed -i "s/base:.*/base: core20/" snap/snapcraft.yaml
-snapcraft remote-build --build-on=${archesCore20} --launchpad-accept-public-upload
-sed -i "s/base:.*/base: core18/" snap/snapcraft.yaml
-snapcraft remote-build --build-on=${archesCore18} --launchpad-accept-public-upload
+rm -rf build
+mkdir -p build/core20
+mkdir -p build/core18
+cp -a snap build/core20/
+cp -a snap build/core18/
 
+here=$( cd `dirname $0` ; pwd )
+cd ${here}/build/core20
+sed -i "s/BASE_FOR_ARCH/core20/" snap/snapcraft.yaml
+sed -i "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
+sed -i "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
+snapcraft remote-build --build-on=${archesCore20} --launchpad-accept-public-upload
+mv cmake_*.snap cmake_*.txt ../
+
+cd ${here}/build/core18
+sed -i "s/BASE_FOR_ARCH/core18/" snap/snapcraft.yaml
+sed -i "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
+sed -i "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
+snapcraft remote-build --build-on=${archesCore18} --launchpad-accept-public-upload
+mv cmake_*.snap cmake_*.txt ../
+
+cd ${here}/build
 tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
 
 # Uploads can take a while, do them in parallel
-archesComma=${archesCore20},${archesCore18}
-archesSpaced=$(echo ${archesComma} | sed "s/,/ /g")
-for arch in ${archesSpaced} ; do
-    filename=cmake_${cmakeVersion}_${arch}.snap
+for filename in cmake_*.snap ; do
     echo "Uploading ${filename} to channel ${track}/edge"
     snapcraft upload ${filename} --release ${track}/edge &
 done

@@ -6,19 +6,19 @@ image::https://snapcraft.io/cmake/badge.svg[link="https://snapcraft.io/cmake"]
 
 # Release Instructions
 
-When an official CMake release is made, run the link:doRelease.sh[doRelease.sh] script locally on a Linux machine.
-Pass the release number as the only command line argument.
-Release candidates are supported.
+Each CMake feature release has its own corresponding branch in this repository.
+These branches follow the naming convention `release/X.Y`.
+The master branch of this repository should only be used for producing packages for the master branch of CMake.
 
-```
-./doRelease.sh 3.22.0-rc3
-```
+When an official CMake release is made (including release candidates), create or checkout the branch tracking that feature release.
+Update the `cmakeVersion` at the top of the link:doRelease.sh[doRelease.sh] script and commit that change.
+Run that script locally on a Linux machine.
 
 The script will run two `snapcraft remote-build` jobs.
 The first builds the majority of the snaps using the `core20` base.
 The second builds the `i386` architecture, which has to use the `core18` base.
-Once both builds have been completed, the log files will be collected into a tarball `cmake_<version>_logs.tar.gz` for easy archiving.
-All the snaps will be downloaded to the current directory by the `remote-build` jobs.
+Once both builds have been completed, the log files will be collected into a tarball `build/cmake_<version>_logs.tar.gz` for easy archiving.
+All the snaps will be available in the `build` directory as well for local testing if required.
 
 Once all `remote-build` jobs have been completed, the snaps will be uploaded to the `edge` channel of the relevant track.
 The uploads are done in parallel, since they can take a while.

@@ -24,7 +24,8 @@ confinement: classic
 grade: stable
 
 # The core20 base doesn't support the i386 architecture
-base: core20
+# Valid values: core20, core18
+base: BASE_FOR_ARCH
 
 # We use the version that the built cmake executable reports
 adopt-info: cmake
@@ -50,7 +51,10 @@ parts:
     after: [qt5]
     source: "https://gitlab.kitware.com/cmake/cmake.git"
     source-depth: 1
-    source-branch: master
+    # Examples:
+    #  source-branch: master
+    #  source-tag: v3.22.1
+    source-CMAKE_SOURCE_VERSION_KEY: CMAKE_SOURCE_VERSION_VALUE
     source-type: git
     plugin: make
     build-environment:
