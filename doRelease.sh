@@ -2,7 +2,7 @@
 set -e
 
 # This value is changed on each release branch. For release branches, this value
-# should have the form vX.Y.Z or vX.Y.Z-rcN
+# should have the form X.Y.Z or X.Y.Z-rcN
 cmakeVersion=master
 
 if [ $# -gt 0 ] ; then
