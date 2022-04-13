@@ -72,6 +72,7 @@ parts:
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/ \
         -DBUILD_TESTING=OFF \
+        -DQHELPGENERATOR_EXECUTABLE=@QHELPGENERATOR_EXECUTABLE@ \
         -DCMake_GUI_DISTRIBUTE_WITH_Qt_LGPL=3
       snapcraftctl build
       echo 'message(${CMAKE_VERSION})' > ${SNAPCRAFT_PART_BUILD}/ver.cmake
