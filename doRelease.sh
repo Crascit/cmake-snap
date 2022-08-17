@@ -52,11 +52,13 @@ mv cmake_*.snap cmake_*.txt ../
 cd ${here}/build
 tar zcf cmake_${cmakeVersion}_logs.tar.gz cmake_*.txt
 
-# Uploads can take a while, do them in parallel
+# Uploads can take a while. Was previously able to do them in parallel, but that became
+# unreliable. Python errors related to retrieving logs began failing. Run them one at a
+# time for now until we can safely run parallel again.
 for filename in cmake_*.snap ; do
     echo "Uploading ${filename} to channel ${track}/edge"
-    snapcraft upload ${filename} --release ${track}/edge &
+    snapcraft upload ${filename} --release ${track}/edge # &
 done
-wait
+#wait
 
 echo "All upload jobs finished"
