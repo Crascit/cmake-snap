@@ -61,6 +61,7 @@ parts:
       - LC_ALL: C.UTF-8
       - LANG: C.UTF-8
     override-build: |
+      pip3 install sphinx
       ${SNAPCRAFT_PART_SRC}/bootstrap \
         --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
         --docdir=doc/cmake \
@@ -86,10 +87,11 @@ parts:
       ln -f -s cpack cmake.cpack
       ln -f -s ctest cmake.ctest
     build-packages:
+      # Don't list python3-sphinx here, that version is too old. We install a newer one with pip at build time.
       - build-essential
       - libssl-dev
       - libncurses5-dev
-      - python3-sphinx
+      - python3-pip
       - qtbase5-dev
       - qt5-default
       - qttools5-dev-tools
