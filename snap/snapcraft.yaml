@@ -80,21 +80,11 @@ parts:
       snapcraftctl set-version $CMAKE_VERSION
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
-      if ! test -e "$SNAPCRAFT_PART_INSTALL/share/bash-completion/completions" ; then
-        mkdir -p $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        ln -f -s ../../cmake-*/completions/cmake cmake
-        ln -f -s ../../cmake-*/completions/cpack cmake.cpack
-        ln -f -s ../../cmake-*/completions/ctest cmake.ctest
-        sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' ../../cmake-*/completions/cpack
-        sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ../../cmake-*/completions/ctest
-      else
-        cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack
-        sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest
-        ln -f -s cpack cmake.cpack
-        ln -f -s ctest cmake.ctest
-      fi
+      cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+      sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack
+      sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest
+      ln -f -s cpack cmake.cpack
+      ln -f -s ctest cmake.ctest
     build-packages:
       - build-essential
       - libssl-dev
@@ -128,7 +118,6 @@ parts:
         - libqt5gui5
         - libgdk-pixbuf2.0-0
         - libqt5svg5 # for loading icon themes which are svg
-        - try: [appmenu-qt5] # not available on core18
         - locales-all
         - libgtk2.0-0
 
