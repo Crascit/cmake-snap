@@ -61,6 +61,7 @@ parts:
       - LC_ALL: C.UTF-8
       - LANG: C.UTF-8
     override-build: |
+      pip3 install sphinx
       ${SNAPCRAFT_PART_SRC}/bootstrap \
         --parallel=${SNAPCRAFT_PARALLEL_BUILD_COUNT} \
         --docdir=doc/cmake \
@@ -80,26 +81,17 @@ parts:
       snapcraftctl set-version $CMAKE_VERSION
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
         $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
-      if ! test -e "$SNAPCRAFT_PART_INSTALL/share/bash-completion/completions" ; then
-        mkdir -p $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        ln -f -s ../../cmake-*/completions/cmake cmake
-        ln -f -s ../../cmake-*/completions/cpack cmake.cpack
-        ln -f -s ../../cmake-*/completions/ctest cmake.ctest
-        sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' ../../cmake-*/completions/cpack
-        sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ../../cmake-*/completions/ctest
-      else
-        cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
-        sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack
-        sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest
-        ln -f -s cpack cmake.cpack
-        ln -f -s ctest cmake.ctest
-      fi
+      cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+      sed -E -i 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack
+      sed -E -i 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest
+      ln -f -s cpack cmake.cpack
+      ln -f -s ctest cmake.ctest
     build-packages:
+      # Don't list python3-sphinx here, that version is too old. We install a newer one with pip at build time.
       - build-essential
       - libssl-dev
       - libncurses5-dev
-      - python3-sphinx
+      - python3-pip
       - qtbase5-dev
       - qt5-default
       - qttools5-dev-tools
@@ -128,7 +120,6 @@ parts:
         - libqt5gui5
         - libgdk-pixbuf2.0-0
         - libqt5svg5 # for loading icon themes which are svg
-        - try: [appmenu-qt5] # not available on core18
         - locales-all
         - libgtk2.0-0
 
