@@ -3,7 +3,7 @@ set -e
 
 # This value is changed on each release branch. For release branches, this value
 # should have the form X.Y.Z or X.Y.Z-rcN
-cmakeVersion=3.26.0-rc1
+cmakeVersion=3.26.0-rc2
 
 if [ $# -gt 0 ] ; then
     echo "No command line options are supported. The CMake version is"
