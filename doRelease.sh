@@ -32,20 +32,27 @@ mkdir -p build/core18
 cp -a snap build/core20/
 cp -a snap build/core18/
 
+platform=$( uname )
+if [[ $platform == Darwin ]]; then
+  sedInPlace="-i \"\""
+else
+  sedInPlace=-i
+fi
+
 here=$( cd `dirname $0` ; pwd )
 cd ${here}/build/core20
-sed -i "s/BASE_FOR_ARCH/core20/" snap/snapcraft.yaml
-sed -i "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
-sed -i "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
-sed -i "s+@QHELPGENERATOR_EXECUTABLE@+/usr/bin/qhelpgenerator+" snap/snapcraft.yaml
+sed ${sedInPlace} "s/BASE_FOR_ARCH/core20/" snap/snapcraft.yaml
+sed ${sedInPlace} "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
+sed ${sedInPlace} "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
+sed ${sedInPlace} "s+@QHELPGENERATOR_EXECUTABLE@+/usr/bin/qhelpgenerator+" snap/snapcraft.yaml
 snapcraft remote-build --build-on=${archesCore20} --launchpad-accept-public-upload
 mv cmake_*.snap cmake_*.txt ../
 
 cd ${here}/build/core18
-sed -i "s/BASE_FOR_ARCH/core18/" snap/snapcraft.yaml
-sed -i "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
-sed -i "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
-sed -i "s+@QHELPGENERATOR_EXECUTABLE@+/usr/bin/qcollectiongenerator+" snap/snapcraft.yaml
+sed ${sedInPlace} "s/BASE_FOR_ARCH/core18/" snap/snapcraft.yaml
+sed ${sedInPlace} "s/CMAKE_SOURCE_VERSION_KEY/${cmake_source_version_key}/" snap/snapcraft.yaml
+sed ${sedInPlace} "s/CMAKE_SOURCE_VERSION_VALUE/${cmake_source_version_value}/" snap/snapcraft.yaml
+sed ${sedInPlace} "s+@QHELPGENERATOR_EXECUTABLE@+/usr/bin/qcollectiongenerator+" snap/snapcraft.yaml
 snapcraft remote-build --build-on=${archesCore18} --launchpad-accept-public-upload
 mv cmake_*.snap cmake_*.txt ../
 
