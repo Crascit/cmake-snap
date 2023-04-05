@@ -16,7 +16,7 @@ if [ "${cmakeVersion}" = "master" ] ; then
     cmake_source_version_key=branch
     cmake_source_version_value=master
 else
-    track=$( echo ${cmakeVersion} | sed 's/^\([0-9]\+\.[0-9]\+\)\.[0-9]\+\(-.\+\)\?$/\1/' )
+    track=$( echo ${cmakeVersion} | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+(-.+)?$/\1/' )
     cmake_source_version_key=tag
     cmake_source_version_value=v${cmakeVersion}
 fi
