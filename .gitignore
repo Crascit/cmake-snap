@@ -1,3 +1,7 @@
-build
+/build
 *.swp
+/.idea
+/.vscode
 
+# We generate this file
+/snap/snapcraft.yaml

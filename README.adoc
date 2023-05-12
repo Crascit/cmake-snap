@@ -4,33 +4,23 @@ This is the snap for CMake, a cross-platform, open-source build system generator
 
 image::https://snapcraft.io/cmake/badge.svg[link="https://snapcraft.io/cmake"]
 
-# Release Instructions
+== Supported Architectures
+
+Starting with the CMake 3.27 release series, snap packages are essentially just a wrapper around the official CMake binary releases from Kitware.
+Snap packages are only provided for the architectures that have an official Kitware release.
+Currently, that is only `amd64` and `arm64` (Kitware releases call these `x86_64` and `aarch64` respectively).
+For CMake 3.27 onward, these will be the only architectures for which new snap packages will be created.
+
+For CMake 3.26 and earlier, snap packages were built using the snapcraft remote build service for architectures `amd64`, `arm64`, `armhf`, `ppc64el`, `s390x` and `i386`.
+These snaps had some differences to the official packages, mostly due to the way Qt was built and incorporated into the snap building process.
+These older snaps will continue to be available for all architectures, but `armhf`, `ppc64el`, `s390x` and `i386` will not receive any updates for CMake 3.27 and later.
+
+== Release Instructions
 
 Each CMake feature release has its own corresponding branch in this repository.
 These branches follow the naming convention `release/X.Y`.
-The master branch of this repository should only be used for producing packages for the master branch of CMake.
-
 When an official CMake release is made (including release candidates), create or checkout the branch tracking that feature release.
-Update the `cmakeVersion` at the top of the link:doRelease.sh[doRelease.sh] script and commit that change.
-Run that script locally on a Linux machine.
-
-The script will run two `snapcraft remote-build` jobs.
-The first builds the majority of the snaps using the `core20` base.
-The second builds the `i386` architecture, which has to use the `core18` base.
-Once both builds have been completed, the log files will be collected into a tarball `build/cmake_<version>_logs.tar.gz` for easy archiving.
-All the snaps will be available in the `build` directory as well for local testing if required.
-
-Once all `remote-build` jobs have been completed, the snaps will be uploaded to the `edge` channel of the relevant track.
-The uploads are done in parallel, since they can take a while.
-Once all uploads have been completed, the script will finish.
-
-# GitHub Integration
-
-There are problems with the GitHub integration which prevent it from being suitable for release builds at this time:
-
-* It always builds the default branch, regardless of which branch is pushed to trigger a build.
-  See https://forum.snapcraft.io/t/snap-build-service-picking-default-branch-instead-of-pushed-branch>[this forum post] describing the problem.
-* We need to specify a specific source tag for the CMake repo in release builds, which requires modifying the link:snap/snapcraft.yaml[snapcraft.yaml] file.
-* We have to modify the base used due to the `i386` architecture not being supported as of `core20`, which also requires modifying the link:snap/snapcraft.yaml[snapcraft.yaml] file.
-
-We also cannot use GitHub actions directly because it doesn't support building for all the architectures we need.
+The link:.github/workflows/build-snap-packages.yml[GitHub workflow file] must be updated with the appropriate feature release version for that branch.
+The other CMake release version details in that file will determine the version of the snap that is built.
+Only tagged releases will upload and publish snaps.
+When publishing, snap packages will be released to the `edge` channel of the track set for the branch.

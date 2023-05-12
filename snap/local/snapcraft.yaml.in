@@ -1,0 +1,72 @@
+name: cmake
+summary: "Cross-platform software build system generator"
+description: |
+  CMake is an open-source, cross-platform family of tools designed
+  to build, test and package software. CMake is used to control the
+  software compilation process using simple platform and compiler
+  independent configuration files, and generate native makefiles
+  and workspaces that can be used in the compiler environment of
+  your choice.
+
+  This snap is maintained separately from the CMake project by one
+  of the CMake co-maintainers.
+
+license: BSD-3-Clause
+title: CMake
+version: @CMAKE_VERSION@
+icon: snap/gui/CMake_Logo.png
+website: https://cmake.org
+issues: https://gitlab.kitware.com/cmake/cmake/issues
+contact: https://crascit.com/contact
+
+confinement: classic
+grade: stable
+
+base: core20
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+
+apps:
+  cmake-gui:
+    command: bin/cmake-gui
+    desktop: share/applications/cmake-gui.desktop
+  ccmake:
+    command: bin/ccmake
+  cmake:
+    command: bin/cmake
+    completer: share/bash-completion/completions/cmake
+  cpack:
+    command: bin/cpack
+    completer: share/bash-completion/completions/cmake.cpack
+  ctest:
+    command: bin/ctest
+    completer: share/bash-completion/completions/cmake.ctest
+
+parts:
+  cmake:
+    source:
+      - on amd64: https://github.com/Kitware/CMake/releases/download/v@CMAKE_VERSION@/cmake-@CMAKE_VERSION@-linux-x86_64.tar.gz
+      - on arm64: https://github.com/Kitware/CMake/releases/download/v@CMAKE_VERSION@/cmake-@CMAKE_VERSION@-linux-aarch64.tar.gz
+    source-type: tar
+    plugin: dump
+    build-environment:
+      - LC_ALL: C.UTF-8
+      - LANG: C.UTF-8
+    override-build: |
+      snapcraftctl build
+      sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
+        $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
+      cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+      sed -E 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack > cmake.cpack
+      sed -E 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest > cmake.ctest
+    stage-packages:
+      - libfontconfig1
+      - libfreetype6
+      - libpng16-16
+      - libxcb1
+    prime:
+      - -usr/share/doc
+      - -usr/share/doc-base
+      - -usr/share/man
