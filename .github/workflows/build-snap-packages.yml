@@ -3,7 +3,7 @@ name: Build snaps
 env:
   CMAKE_FEATURE_RELEASE: "3.28"
   CMAKE_PATCH_RELEASE: "0"
-  CMAKE_RELEASE_SUFFIX: "-rc5"
+  CMAKE_RELEASE_SUFFIX: "-rc6"
   SNAP_RELEASE_TRACK: candidate
 
 on:
