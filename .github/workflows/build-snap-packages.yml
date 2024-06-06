@@ -1,10 +1,10 @@
 name: Build snaps
 
 env:
-  CMAKE_FEATURE_RELEASE: "3.27"
+  CMAKE_FEATURE_RELEASE: "3.30"
   CMAKE_PATCH_RELEASE: "0"
-  CMAKE_RELEASE_SUFFIX: "-rcX"
-  SNAP_RELEASE_TRACK: edge
+  CMAKE_RELEASE_SUFFIX: "-rc1"
+  SNAP_RELEASE_TRACK: candidate
 
 on:
   push:
