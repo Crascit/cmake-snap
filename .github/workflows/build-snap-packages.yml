@@ -20,15 +20,15 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Check out git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Apply CMake version to snapcraft.yaml
         run: sed -E 's+@CMAKE_VERSION@+${{ env.CMAKE_FEATURE_RELEASE }}.${{ env.CMAKE_PATCH_RELEASE }}${{ env.CMAKE_RELEASE_SUFFIX }}+g' local/snapcraft.yaml.in > snapcraft.yaml
         working-directory: ./snap
       - name: Build snap
         id: build
-        uses: snapcore/action-build@v1
+        uses: canonical/action-build@v1
       - name: Publish snap
-        uses: snapcore/action-publish@v1
+        uses: canonical/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
         with:
