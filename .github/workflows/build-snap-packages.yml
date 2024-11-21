@@ -26,9 +26,9 @@ jobs:
         working-directory: ./snap
       - name: Build snap
         id: build
-        uses: canonical/action-build@v1
+        uses: snapcore/action-build@v1
       - name: Publish snap
-        uses: canonical/action-publish@v1
+        uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_STORE_LOGIN }}
         with:
