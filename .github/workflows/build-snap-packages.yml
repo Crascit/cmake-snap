@@ -16,7 +16,7 @@ jobs:
     name: Build and publish (${{ matrix.runs-on }})
     strategy:
       matrix:
-        runs-on: [ ubuntu-latest, buildjet-2vcpu-ubuntu-2204-arm ]
+        runs-on: [ ubuntu-latest, ubuntu-24.04-arm ]
     runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Check out git repo
