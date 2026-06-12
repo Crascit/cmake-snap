@@ -22,11 +22,11 @@ contact: https://crascit.com/contact
 confinement: classic
 grade: stable
 
-base: core22
+base: core24
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
+platforms:
+  amd64:
+  arm64:
 
 apps:
   cmake-gui:
