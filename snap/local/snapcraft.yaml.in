@@ -22,7 +22,7 @@ contact: https://crascit.com/contact
 confinement: classic
 grade: stable
 
-base: core20
+base: core22
 
 architectures:
   - build-on: amd64
@@ -55,10 +55,10 @@ parts:
       - LC_ALL: C.UTF-8
       - LANG: C.UTF-8
     override-build: |
-      snapcraftctl build
+      craftctl default
       sed -i s+^Icon=.*+Icon=/share/icons/hicolor/128x128/apps/CMakeSetup.png+g \
-        $SNAPCRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
-      cd $SNAPCRAFT_PART_INSTALL/share/bash-completion/completions
+        $CRAFT_PART_INSTALL/share/applications/cmake-gui.desktop
+      cd $CRAFT_PART_INSTALL/share/bash-completion/completions
       sed -E 's+^(complete .*) cpack$+\1 cmake.cpack+g' cpack > cmake.cpack
       sed -E 's+^(complete .*) ctest$+\1 cmake.ctest+g' ctest > cmake.ctest
     stage-packages:
